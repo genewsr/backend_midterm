@@ -1,0 +1,226 @@
+#a: Test case ตามข้อ 1 
+#1.เพิ่มพรรคการเมือง 3 พรรค
+POST http://127.0.0.1:8000/Parties/
+
+{
+  "party_name": "พรรคประชาชน",
+  "party_leader": "ณัฐพงษ์ เรืองปัญญาวุฒิ",
+  "party_logo_url": "logo_ppp.jpg"
+}
+
+POST http://127.0.0.1:8000/Parties/
+
+{
+  "party_name": "พรรคเพื่อไทย",
+  "party_leader": "ยศชนันดิ์ วงศวัสดิ์",
+  "party_logo_url": "logo_pt.jpg"
+}
+
+POST http://127.0.0.1:8000/Parties/
+
+{
+  "party_name": "พรรคภูมิใจไทย",
+  "party_leader": "อนุทิน ชาญวีรกูล",
+  "party_logo_url": "logo_bjt.jpg"
+}
+
+#2.ดูรายชื่อพรรคการเมือง
+GET http://127.0.0.1:8000/Parties/
+
+#3. เพิ่มผู้สมัคร เขต 1 (3 คน จาก 3 พรรค)
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 1,
+  "party_id": 1,
+  "candidate_number": 1,
+  "full_name": "นางสาวน้ำฟ้า เขตหนึ่ง"
+}
+
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 1,
+  "party_id": 2,
+  "candidate_number": 2,
+  "full_name": "นายยีน เขตหนึ่ง"
+}
+
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 1,
+  "party_id": 3,
+  "candidate_number": 3,
+  "full_name": "นางสาวโมจิ เขตหนึ่ง"
+}
+
+#4. เพิ่มผู้สมัคร เขต 2
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 2,
+  "party_id": 1,
+  "candidate_number": 1,
+  "full_name": "นางสาวชมรี่ เขตสอง"
+}
+
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 2,
+  "party_id": 2,
+  "candidate_number": 2,
+  "full_name": "นางสาวอันอัน เขตสอง"
+}
+
+POST http://127.0.0.1:8000/Candidates/
+
+{
+  "const_id": 2,
+  "party_id": 3,
+  "candidate_number": 3,
+  "full_name": "นายโอชิ เขตสอง"
+}
+
+#5.ดูรายชื่อผู้สมัคร (พร้อมรายละเอียดเขต)
+GET http://127.0.0.1:8000/Candidates/
+
+
+#b:Test case ตามข้อ 2 (อย่างน้อย 20 รายชื่อ)
+
+#เพิ่มผู้มีสิทธิ์เลือกตั้ง
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000001",
+  "full_name": "สมชาย ใจดี",
+  "const_id": 1
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000002",
+  "full_name": "สมหญิง รักชาติ",
+  "const_id": 1
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000003",
+  "full_name": "สมศักดิ์ มักจะมา",
+  "const_id": 2
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000004",
+  "full_name": "สมหมาย ทองมี",
+  "const_id": 3
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000005",
+  "full_name": "บุญช่วย คำดี",
+  "const_id": 3
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000006",
+  "full_name": "ประหยัด รักบ้าน",
+  "const_id": 2
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "000000000000",
+  "full_name": "ประหยัด รักบ้าน",
+  "const_id": 2
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000006",
+  "full_name": "ประหยัด รักบ้าน",
+  "const_id": 2
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000006",
+  "full_name": "ประหยัด รักบ้าน",
+  "const_id": 2
+}
+
+POST http://127.0.0.1:8000/Voters/
+
+{
+  "citizen_id": "0000000000006",
+  "full_name": "ประหยัด รักบ้าน",
+  "const_id": 2
+}
+
+### เพิ่มผู้มีสิทธิ์เลือกตั้งคนที่ 4-20 (ก๊อปปี้วางเพิ่มตรงนี้ให้ครบ 20 เพื่อเอาคะแนนเต็ม)
+
+### อัพเดทสถานะการลงคะแนน (สมมติว่า Voter ID 1 โหวตแล้ว)
+PATCH {{baseUrl}}/Voters/1/vote_status?has_voted_const=1&has_voted_list=1
+
+### ดูรายชื่อผู้มีสิทธิ์ทั้งหมด
+GET {{baseUrl}}/Voters/
+
+
+### ==========================================
+### ข้อ 6.c: Test case ตามข้อ 3 (บันทึกและแสดงจำนวนคนโหวต)
+### ==========================================
+
+### ลงคะแนนแบบ ส.ส. เขต (Constituency)
+POST {{baseUrl}}/Ballots/
+Content-Type: application/json
+
+{
+  "const_id": 1,
+  "candidate_id": 1,
+  "party_id": null,
+  "vote_type": "Constituency"
+}
+
+### ลงคะแนนแบบ บัญชีรายชื่อ (PartyList)
+POST {{baseUrl}}/Ballots/
+Content-Type: application/json
+
+{
+  "const_id": 1,
+  "candidate_id": null,
+  "party_id": 1,
+  "vote_type": "PartyList"
+}
+
+### แสดงจำนวนผู้ลงคะแนนแยกตามเขตเลือกตั้ง
+GET {{baseUrl}}/Ballots/count
+
+
+### ==========================================
+### ข้อ 6.d: Test case ตามข้อ 4 (แสดงผลการเลือกตั้ง)
+### ==========================================
+
+### แสดงผลการเลือกตั้งแบบพรรคการเมือง (ภาพรวม)
+GET {{baseUrl}}/Results/Parties/
+
+### แสดงผลการเลือกตั้งแบบพรรคการเมือง (เฉพาะเขต 1)
+GET {{baseUrl}}/Results/Parties/?const_id=1
+
+### แสดงผลการเลือกตั้งแบบ ส.ส. เขต (ภาพรวม)
+GET {{baseUrl}}/Results/Candidates/
+
+### แสดงผลการเลือกตั้งแบบ ส.ส. เขต (เฉพาะเขต 1)
+GET {{baseUrl}}/Results/Candidates/?const_id=1
