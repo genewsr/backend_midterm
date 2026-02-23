@@ -161,12 +161,18 @@ async def update_vote_status(voter_id: int):
 
 @app.post("/Ballots/")
 async def create_ballot(ballot: BallotIn):
-    new_ballot = Ballot(**ballot.model_dump())
     with Session(engine) as s:
+        if ballot.vote_type == 'Constituency' and ballot.candidate_id is not None:
+            candidate = s.get(Candidate, ballot.candidate_id)
+            if candidate and candidate.const_id != ballot.const_id:
+                raise HTTPException(status_code=400, detail="ผู้สมัครคนนี้ไม่ได้ลงแข่งในเขตนี้")
+
+        new_ballot = Ballot(**ballot.model_dump())
         s.add(new_ballot)
         s.commit()
         s.refresh(new_ballot)
         return new_ballot
+
 
 @app.get("/Ballots/count")
 async def get_vote_count():
@@ -199,7 +205,14 @@ async def get_party_results(const_id: int | None = None):
         output = []
         for pid, count in results:
             if pid is not None:
-                output.append({"party_id": pid, "total_votes": count})
+                party = s.exec(select(Party).where(Party.party_id == pid)).first()
+                party_name = party.party_name if party else "ไม่พบข้อมูลพรรค"
+                
+                output.append({
+                    "party_id": pid, 
+                    "party_name": party_name,  
+                    "total_votes": count
+                })
         return output
 
 @app.get("/Results/Candidates/")
@@ -216,5 +229,13 @@ async def get_candidate_results(const_id: int | None = None):
         output = []
         for cid, c_id, count in results:
             if cid is not None:
-                output.append({"candidate_id": cid, "const_id": c_id, "total_votes": count})
+                candidate = s.exec(select(Candidate).where(Candidate.candidate_id == cid)).first()
+                candidate_name = candidate.full_name if candidate else "ไม่พบข้อมูลผู้สมัคร"
+                
+                output.append({
+                    "candidate_id": cid, 
+                    "candidate_name": candidate_name, 
+                    "const_id": c_id, 
+                    "total_votes": count
+                })
         return output
